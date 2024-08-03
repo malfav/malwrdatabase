@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malware Database</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark-mode {
+            background-color: #121212;
+            color: #f0f0f0;
+        }
+
+        .card {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card.dark-mode {
+            background-color: #1e1e1e;
+        }
+
+        .table {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .table th, .table td {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .table th.dark-mode, .table td.dark-mode {
+            background-color: #2c2c2c;
+            color: #f0f0f0;
+        }
+
+        .mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toggle-label {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="mode-toggle">
+            <label class="toggle-label" for="darkModeToggle">Dark Mode</label>
+            <input type="checkbox" id="darkModeToggle">
+        </div>
+
+        <!-- Malicious DLLs and Windows API Functions -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Malicious DLLs and Associated Windows API Functions
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                            <th>Common DLLs</th>
+                            <th>Common Windows API Functions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Spying</td>
+                            <td>DLLs designed to monitor and collect information about user activities.</td>
+                            <td>
+                                <ul>
+                                    <li><code>user32.dll</code></li>
+                                    <li><code>advapi32.dll</code></li>
+                                    <li><code>kernel32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>SetWindowsHookEx</code> - Monitors input events like keystrokes.</li>
+                                    <li><code>GetForegroundWindow</code> - Retrieves the active window handle.</li>
+                                    <li><code>GetWindowText</code> - Captures the title of the active window.</li>
+                                    <li><code>ReadProcessMemory</code> - Extracts information from other processes.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Enumeration</td>
+                            <td>DLLs used to gather information about the system, network, or processes.</td>
+                            <td>
+                                <ul>
+                                    <li><code>netapi32.dll</code></li>
+                                    <li><code>iphlpapi.dll</code></li>
+                                    <li><code>kernel32.dll</code></li>
+                                    <li><code>ws2_32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>NetServerEnum</code> - Enumerates network servers.</li>
+                                    <li><code>EnumProcesses</code> - Lists all running processes.</li>
+                                    <li><code>GetSystemInfo</code> - Retrieves system hardware information.</li>
+                                    <li><code>GetAdaptersInfo</code> - Gathers network adapter details.</li>
+                                    <li><code>WNetOpenEnum</code> - Enumerates network resources.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Process Injection</td>
+                            <td>DLLs that inject code into other processes to execute malicious payloads.</td>
+                            <td>
+                                <ul>
+                                    <li><code>kernel32.dll</code></li>
+                                    <li><code>ntdll.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>CreateRemoteThread</code> - Creates a thread in a remote process.</li>
+                                    <li><code>VirtualAllocEx</code> - Allocates memory in a remote process.</li>
+                                    <li><code>WriteProcessMemory</code> - Writes data into a remote process.</li>
+                                    <li><code>NtQueueApcThread</code> - Executes code in a remote thread.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Internet Connection with C2</td>
+                            <td>DLLs that establish connections with Command and Control (C2) servers.</td>
+                            <td>
+                                <ul>
+                                    <li><code>winhttp.dll</code></li>
+                                    <li><code>wininet.dll</code></li>
+                                    <li><code>ws2_32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>WinHttpOpen</code> - Initializes an HTTP request session.</li>
+                                    <li><code>InternetOpen</code> - Starts an Internet session.</li>
+                                    <li><code>InternetConnect</code> - Connects to an Internet server.</li>
+                                    <li><code>WSAStartup</code> - Initializes Winsock for network communication.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Obfuscation</td>
+                            <td>DLLs that use techniques to hide the true nature of their code.</td>
+                            <td>
+                                <ul>
+                                    <li><code>kernel32.dll</code></li>
+                                    <li><code>ntdll.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>VirtualProtect</code> - Changes the protection on a region of memory.</li>
+                                    <li><code>RtlEncryptMemory</code> - Encrypts data in memory.</li>
+                                    <li><code>GetProcAddress</code> - Retrieves the address of an exported function from a DLL.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Encryption</td>
+                            <td>DLLs that encrypt or decrypt data for secure communication.</td>
+                            <td>
+                                <ul>
+                                    <li><code>crypt32.dll</code></li>
+                                    <li><code>advapi32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>CryptEncrypt</code> - Encrypts data.</li>
+                                    <li><code>CryptDecrypt</code> - Decrypts data.</li>
+                                    <li><code>CryptProtectData</code> - Protects data with encryption.</li>
+                                    <li><code>CryptUnprotectData</code> - Decrypts data that was encrypted using CryptProtectData.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Dropper</td>
+                            <td>DLLs that deploy additional malicious payloads onto the system.</td>
+                            <td>
+                                <ul>
+                                    <li><code>kernel32.dll</code></li>
+                                    <li><code>shell32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>CreateProcess</code> - Creates a new process and its primary thread.</li>
+                                    <li><code>ShellExecute</code> - Launches an application.</li>
+                                    <li><code>WriteFile</code> - Writes data to a file.</li>
+                                    <li><code>CopyFile</code> - Copies an existing file to a new file.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>File Writing</td>
+                            <td>DLLs responsible for creating, modifying, or deleting files.</td>
+                            <td>
+                                <ul>
+                                    <li><code>kernel32.dll</code></li>
+                                    <li><code>advapi32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>CreateFile</code> - Creates or opens a file or I/O device.</li>
+                                    <li><code>WriteFile</code> - Writes data to a file.</li>
+                                    <li><code>DeleteFile</code> - Deletes an existing file.</li>
+                                    <li><code>MoveFile</code> - Moves an existing file or a directory.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Registry Manipulation</td>
+                            <td>DLLs that alter the Windows Registry to achieve persistence or other goals.</td>
+                            <td>
+                                <ul>
+                                    <li><code>advapi32.dll</code></li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li><code>RegCreateKeyEx</code> - Creates or opens a registry key.</li>
+                                    <li><code>RegSetValueEx</code> - Sets the data for a specified registry key value.</li>
+                                    <li><code>RegDeleteKey</code> - Deletes a specified registry key.</li>
+                                    <li><code>RegQueryValueEx</code> - Retrieves the data for a specified registry key value.</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PE Sections -->
+        <div class="card mt-4">
+            <div class="card-header">
+                PE Sections
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Section Name</th>
+                            <th>Description</th>
+                            <th>Contains Executable Code?</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>.text</td>
+                            <td>Contains the executable code for the application.</td>
+                            <td>Yes</td>
+                        </tr>
+                        <tr>
+                            <td>.data</td>
+                            <td>Contains initialized data such as global variables.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.rdata</td>
+                            <td>Contains read-only data like constants and import tables.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.rsrc</td>
+                            <td>Contains resources such as icons, images, menus.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.bss</td>
+                            <td>Contains uninitialized data, typically zero-initialized variables.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.edata</td>
+                            <td>Contains export data, such as function names exported by the module.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.idata</td>
+                            <td>Contains import data, such as function names imported by the module.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.reloc</td>
+                            <td>Contains relocation information used for address correction.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.pdata</td>
+                            <td>Contains exception handling data for the program.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.rsrc</td>
+                            <td>Contains resources for the application like icons and strings.</td>
+                            <td>No</td>
+                        </tr>
+                        <tr>
+                            <td>.overlay</td>
+                            <td>Custom section often used by packers or protection schemes.</td>
+                            <td>Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Memory Forensics -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Memory Forensics
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Process</th>
+                            <th>Description</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>svchost.exe</td>
+                            <td>Generic host process for services that run from DLLs.</td>
+                            <td>Multiple instances are normal, but suspicious if running from unusual paths.</td>
+                        </tr>
+                        <tr>
+                            <td>csrss.exe</td>
+                            <td>Client/Server Runtime Subsystem, handles windows and threads.</td>
+                            <td>Should have only one instance running per session.</td>
+                        </tr>
+                        <tr>
+                            <td>winlogon.exe</td>
+                            <td>Handles the login and logout procedures for Windows.</td>
+                            <td>Should only have one instance running.</td>
+                        </tr>
+                        <tr>
+                            <td>lsass.exe</td>
+                            <td>Local Security Authority Subsystem Service, handles security policies.</td>
+                            <td>Should only have one instance running.</td>
+                        </tr>
+                        <tr>
+                            <td>explorer.exe</td>
+                            <td>Windows Explorer, provides the user interface for Windows.</td>
+                            <td>Should only have one instance running per user session.</td>
+                        </tr>
+                        <tr>
+                            <td>smss.exe</td>
+                            <td>Session Manager Subsystem, responsible for session creation and management.</td>
+                            <td>Should only have one instance running per session.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Encryption, Encoding, and Obfuscation Techniques -->
+        <div class="card mt-4">
+            <div class="card-header">
+                Encryption, Encoding, and Obfuscation Techniques
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Technique</th>
+                            <th>Description</th>
+                            <th>Common Algorithms</th>
+                            <th>Usage in Malware</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Encryption</td>
+                            <td>Converts plaintext into ciphertext to secure data.</td>
+                            <td>
+                                <ul>
+                                    <li>AES</li>
+                                    <li>RSA</li>
+                                    <li>DES</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Encrypting C2 communications</li>
+                                    <li>Encrypting payloads before dropping</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Encoding</td>
+                            <td>Converts data into a different format using a scheme.</td>
+                            <td>
+                                <ul>
+                                    <li>Base64</li>
+                                    <li>URL Encoding</li>
+                                    <li>Hex Encoding</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Obfuscating malicious scripts</li>
+                                    <li>Hiding strings in binaries</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Obfuscation</td>
+                            <td>Hides the true purpose of code by making it difficult to understand.</td>
+                            <td>
+                                <ul>
+                                    <li>Control Flow Obfuscation</li>
+                                    <li>String Obfuscation</li>
+                                    <li>Code Flattening</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Hiding malicious intent in code</li>
+                                    <li>Bypassing static analysis</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Packing</td>
+                            <td>Compresses or encrypts the executable to evade detection.</td>
+                            <td>
+                                <ul>
+                                    <li>UPX</li>
+                                    <li>PECompact</li>
+                                    <li>ASPack</li>
+                                </ul>
+                            </td>
+                            <td>
+                                <ul>
+                                    <li>Evading signature-based detection</li>
+                                    <li>Making reverse engineering difficult</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const toggle = document.getElementById('darkModeToggle');
+        toggle.addEventListener('change', () => {
+            document.body.classList.toggle('dark-mode');
+            document.querySelectorAll('.card, .table th, .table td').forEach(el => {
+                el.classList.toggle('dark-mode');
+            });
+        });
+    </script>
+
+</body>
+
+</html>
